@@ -1,6 +1,5 @@
 {
   "rewrites": [
     { "source": "/((?!api/).*)", "destination": "/index.html" }
-  ],
-  "_comment": "OPTIONS Allowlist configurado en Vercel: /api/ para CORS preflight"
+  ]
 }
