@@ -3,6 +3,8 @@ export default function handler(req, res) {
     message: 'Test API function working',
     url: req.url,
     method: req.method,
+    query: req.query,
+    queryKeys: Object.keys(req.query || {}),
     timestamp: new Date().toISOString()
   })
 }
