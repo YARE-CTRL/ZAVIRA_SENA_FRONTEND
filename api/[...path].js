@@ -87,12 +87,15 @@ export default async function handler(req, res) {
     const message = error && error.name === 'AbortError'
       ? 'Proxy timeout to backend'
       : 'Proxy request failed'
+    const targetUrl = buildTargetUrl(req)
 
     res.statusCode = 502
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify({
       error: message,
       details: error instanceof Error ? error.message : String(error),
+      debugTargetUrl: targetUrl,
+      debugReqUrl: req.url,
     }))
   }
 }
