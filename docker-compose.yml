@@ -23,7 +23,7 @@ services:
       - .:/app
       - /app/node_modules  # Evitar sobrescribir node_modules del container
     environment:
-      - VITE_API_URL=http://52.20.236.109:3333
+      - VITE_API_URL=https://churnable-nimbly-norbert.ngrok-free.dev
       - VITE_ENV=development
     networks:
       - eduexce-network
@@ -40,12 +40,12 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: http://52.20.236.109:3333
+        VITE_API_URL: https://churnable-nimbly-norbert.ngrok-free.dev
         VITE_ENV: production
     ports:
       - "8080:80"
     environment:
-      - VITE_API_URL=http://52.20.236.109:3333
+      - VITE_API_URL=https://churnable-nimbly-norbert.ngrok-free.dev
       - VITE_ENV=production
     networks:
       - eduexce-network
