@@ -2,12 +2,17 @@ const DEFAULT_BACKEND_URL = 'https://churnable-nimbly-norbert.ngrok-free.dev'
 
 function buildTargetUrl(req) {
   const baseUrl = (process.env.BACKEND_BASE_URL || DEFAULT_BACKEND_URL).replace(/\/$/, '')
-  const pathParts = Array.isArray(req.query.path)
-    ? req.query.path
-    : req.query.path
-      ? [req.query.path]
-      : []
-  const joinedPath = pathParts.map((p) => encodeURIComponent(p)).join('/')
+  
+  // Para req.url = '/api/health?params=1', extraer 'health?params=1' después de '/api/'
+  let pathAndQuery = (req.url || '').replace(/^\/api\//, '') || ''
+  
+  // Separar path de query string
+  const [path, queryString] = pathAndQuery.split('?')
+  
+  // Si no hay path directo, intenta desde req.query.path (compatibilidad)
+  const finalPath = path || (Array.isArray(req.query.path)
+    ? req.query.path.join('/')
+    : req.query.path || '')
 
   const params = new URLSearchParams()
   Object.entries(req.query || {}).forEach(([key, value]) => {
@@ -21,8 +26,9 @@ function buildTargetUrl(req) {
     }
   })
 
-  const query = params.toString()
-  return `${baseUrl}/${joinedPath}${query ? `?${query}` : ''}`
+  // Usar query string del req.url si existe, sino construir desde params
+  const finalQuery = queryString || params.toString()
+  return `${baseUrl}/${finalPath}${finalQuery ? `?${finalQuery}` : ''}`
 }
 
 function buildForwardHeaders(req) {
